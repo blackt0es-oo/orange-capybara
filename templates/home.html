@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html data-theme="forest" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ToDoList</title>
+        <link rel="stylesheet" href="/static/styles.css">
+        <!--<link rel="stylesheet" href="/static/output.css">-->
+        
+    </head>
+    <body>
+        <main>
+            <h1>To Do List</h1>
+
+            <section>
+                <form action="/" method="post">
+                <!--enter errand-->
+                    <p><input type="text" name="action" required placeholder="Enter Task"> Due: <input type="date" name="due" required min="currentDate()"></p>
+                    <p><input type="submit" value="Enter" name="Done"></p>
+                </form>
+                <script>
+                    function currentDate()
+                    {
+
+                        
+                    }
+                </script>
+            </section>
+    
+            <section>
+                <!--This section I want to make a to add a check box per task (when I press enter or 
+                the done button a checkbox is added with the task)-->
+                <form action="/">
+                    <fieldset>
+                        <legend>To Do:</legend>
+
+                        <ul>
+                            {%for task in history%}
+                        
+                            
+                                <li><p><input type="checkbox" onclick="deleteTask(this)">Task: {{ task[0] }} | Due: {{ task[1] }}</p></li>    
+                                <!--when I fetch this over to python using post to convert to bring them back to their action and date state variables-->
+                            
+                            {%endfor%}
+                        </ul>
+                        <script>                            
+
+                            function deleteTask(checkbox)
+                            {
+                               
+                                const listItem = checkbox.closest('li');
+                                listItem.remove();
+                                
+                                const pElement= checkbox.closest('p');
+                                const text = pElement.textContent;
+                                
+                                
+                                fetch('/clear-history', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body:JSON.stringify({clearHistory: text})
+                                });
+
+                            }
+                            
+                            
+                        </script>
+                    </fieldset>
+                    
+                </form>
+            </section>
+        </main>
+    </body>
+
+</html>
